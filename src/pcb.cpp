@@ -156,7 +156,7 @@ void interrupt PCB::fork() {
     lock;
     asm {
     	mov actualss, ss      
-		mov actualbp, bp
+	mov actualbp, bp
     }
     // Should always be bp == sp in this context (inside routine marked as interrupt)
     parentPCB = (PCB *)PCB::running;
@@ -199,19 +199,19 @@ void interrupt PCB::fork() {
     asm {
         mov ax, word ptr [bp]   // "actual" BP always points to his previous BP
         mov oldbp, ax   		
-		sub ax, bp				
-		mov gap, ax				// finding difference between oldbp(i+1) and oldbp(i)
+	sub ax, bp				
+	mov gap, ax				// finding difference between oldbp(i+1) and oldbp(i)
 
         mov bx, childbp  		// will use the childbp(i) to find childbp(i+1)
         mov ax, childbp 		
         add ax, gap  			
-		mov childbp, ax			// passing onto next iteration of childbp before i use ax again
+	mov childbp, ax			// passing onto next iteration of childbp before i use ax again
         mov word ptr es:bx, ax  
-		mov bp, oldbp 			
+	mov bp, oldbp 			
         mov ax, bp
-		add ax, 0 				//
-		jnz loop	            // checking if i hit sentinel
-	}
+	add ax, 0 				//
+	jnz loop	            // checking if i hit sentinel
+    }
 
     asm {
         mov bp, actualbp   //restoring essentials thay i've been using in bp hunt
